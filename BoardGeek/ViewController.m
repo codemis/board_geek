@@ -19,6 +19,27 @@
     self.chatBox.text = newText;
 }
 
+-(void)grabXMLData
+{
+    NSURL *url = [[NSURL alloc] initWithString:@"http://www.boardgamegeek.com/xmlapi2/hot?type=boardgame"];
+    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+    [xmlParser setDelegate:self];
+    BOOL success = [xmlParser parse];
+    if (success) {
+        if ([self.boardGameItemsArray count] == 0) {
+            [self updateChatBox:@"Brain fart...Try again..."];
+            return;
+        }
+        int rndIndex = arc4random()%[self.boardGameItemsArray count];
+        self.selectedBoardGame = [self.boardGameItemsArray objectAtIndex:rndIndex];
+        NSString *title = [self.selectedBoardGame objectForKey:@"itemName"];
+        [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
+    } else{
+        [self updateChatBox:@"Brain fart...Try again..."];
+    }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -115,21 +136,8 @@
 #pragma IBActions
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender {
     [self updateChatBox:@"Thinking...Hmmmmm....."];
-    NSURL *url = [[NSURL alloc] initWithString:@"http://www.boardgamegeek.com/xmlapi2/hot?type=boardgame"];
-    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
-    [xmlParser setDelegate:self];
-    BOOL success = [xmlParser parse];
-    if (success) {
-        if ([self.boardGameItemsArray count] == 0) {
-            [self updateChatBox:@"Brain fart...Try again..."];
-            return;
-        }
-        int rndIndex = arc4random()%[self.boardGameItemsArray count];
-        self.selectedBoardGame = [self.boardGameItemsArray objectAtIndex:rndIndex];
-        NSString *title = [self.selectedBoardGame objectForKey:@"itemName"];
-        [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
-    } else{
-        [self updateChatBox:@"Brain fart...Try again..."];
-    }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
+    [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
 }
 @end
