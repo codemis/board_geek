@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <NSXMLParserDelegate, UIGestureRecognizerDelegate>
+@property (strong, nonatomic) IBOutlet UITextView *chatBox;
+@property NSMutableArray *boardGameItemsArray;
+@property NSMutableDictionary *boardGameItemData;
+@property NSString *boardGameItemId;
+@property NSString *boardGameThumbnail;
+@property NSString *boardGameName;
+@property NSMutableDictionary *selectedBoardGame;
+- (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender;
 
 @end
