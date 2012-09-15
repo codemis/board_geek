@@ -10,4 +10,6 @@
 
 @interface DetailsViewController : UITableViewController
 
+@property NSString *gameId;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "DetailsViewController.h"
 
 @interface ViewController ()
 
@@ -143,6 +144,15 @@
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
 }
+#pragma mark
+#pragma Segue Delegates
 - (IBAction)done:(UIStoryboardSegue *)segue {
+}
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"getDetails"]) {
+        DetailsViewController *controller = [segue destinationViewController];
+        controller.gameId = [self.selectedBoardGame objectForKey:@"itemID"];
+    }
 }
 @end
