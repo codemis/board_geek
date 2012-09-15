@@ -82,10 +82,10 @@
             </objects>
             <point key="canvasLocation" x="268" y="-11"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Details View Controller-->
         <scene sceneID="1Rf-gC-JlC">
             <objects>
-                <tableViewController id="FRP-U2-NSE" sceneMemberID="viewController">
+                <tableViewController id="FRP-U2-NSE" customClass="DetailsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="BBR-xH-g3T">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -281,6 +281,9 @@
         <image name="geek_zombie_512.png" width="512" height="512"/>
     </resources>
     <classes>
+        <class className="DetailsViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DetailsViewController.h"/>
+        </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>

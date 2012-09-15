@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6679843216043CD5000415BA /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679843116043CD5000415BA /* DetailsViewController.m */; };
 		66DECE5615F074A900372319 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5515F074A900372319 /* UIKit.framework */; };
 		66DECE5815F074A900372319 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5715F074A900372319 /* Foundation.framework */; };
 		66DECE5A15F074A900372319 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5915F074A900372319 /* CoreGraphics.framework */; };
@@ -35,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6679843016043CD5000415BA /* DetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
+		6679843116043CD5000415BA /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		66DECE5115F074A900372319 /* BoardGeek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoardGeek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DECE5515F074A900372319 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		66DECE5715F074A900372319 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -121,6 +124,8 @@
 				66DECE6A15F074A900372319 /* ViewController.h */,
 				66DECE6B15F074A900372319 /* ViewController.m */,
 				66DECE5C15F074A900372319 /* Supporting Files */,
+				6679843016043CD5000415BA /* DetailsViewController.h */,
+				6679843116043CD5000415BA /* DetailsViewController.m */,
 			);
 			path = BoardGeek;
 			sourceTree = "<group>";
@@ -277,6 +282,7 @@
 				66DECE6215F074A900372319 /* main.m in Sources */,
 				66DECE6615F074A900372319 /* AppDelegate.m in Sources */,
 				66DECE6C15F074A900372319 /* ViewController.m in Sources */,
+				6679843216043CD5000415BA /* DetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +454,7 @@
 				66DECE8615F074A900372319 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		66DECE8715F074A900372319 /* Build configuration list for PBXNativeTarget "BoardGeekTests" */ = {
 			isa = XCConfigurationList;
@@ -456,6 +463,7 @@
 				66DECE8915F074A900372319 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
