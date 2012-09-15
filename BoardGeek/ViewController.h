@@ -16,6 +16,6 @@
 @property NSString *boardGameThumbnail;
 @property NSString *boardGameName;
 @property NSMutableDictionary *selectedBoardGame;
+@property (strong, nonatomic) IBOutlet UIButton *detailsButton;
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender;
-
 @end

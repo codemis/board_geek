@@ -34,6 +34,7 @@
         self.selectedBoardGame = [self.boardGameItemsArray objectAtIndex:rndIndex];
         NSString *title = [self.selectedBoardGame objectForKey:@"itemName"];
         [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
+        self.detailsButton.hidden = NO;
     } else{
         [self updateChatBox:@"Brain fart...Try again..."];
     }
@@ -50,6 +51,7 @@
         [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
     }
     [self setBoardGameItemsArray:[[NSMutableArray alloc] init]];
+    self.detailsButton.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -137,7 +139,10 @@
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender {
     [self updateChatBox:@"Thinking...Hmmmmm....."];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    self.detailsButton.hidden = YES;
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
+}
+- (IBAction)done:(UIStoryboardSegue *)segue {
 }
 @end
