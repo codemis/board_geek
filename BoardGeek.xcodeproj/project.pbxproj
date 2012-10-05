@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6679843216043CD5000415BA /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679843116043CD5000415BA /* DetailsViewController.m */; };
+		66BE4B26161E816A000A3E50 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BE4B25161E816A000A3E50 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66DECE5615F074A900372319 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5515F074A900372319 /* UIKit.framework */; };
 		66DECE5815F074A900372319 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5715F074A900372319 /* Foundation.framework */; };
 		66DECE5A15F074A900372319 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5915F074A900372319 /* CoreGraphics.framework */; };
@@ -38,6 +39,9 @@
 /* Begin PBXFileReference section */
 		6679843016043CD5000415BA /* DetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
 		6679843116043CD5000415BA /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
+		66BE4B23161E816A000A3E50 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		66BE4B24161E816A000A3E50 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		66BE4B25161E816A000A3E50 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		66DECE5115F074A900372319 /* BoardGeek.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoardGeek.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66DECE5515F074A900372319 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		66DECE5715F074A900372319 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -85,6 +89,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		66BE4B21161E7E13000A3E50 /* includes */ = {
+			isa = PBXGroup;
+			children = (
+				66BE4B23161E816A000A3E50 /* GTMDefines.h */,
+				66BE4B24161E816A000A3E50 /* GTMNSString+HTML.h */,
+				66BE4B25161E816A000A3E50 /* GTMNSString+HTML.m */,
+			);
+			name = includes;
+			sourceTree = "<group>";
+		};
 		66DECE4615F074A800372319 = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +132,7 @@
 		66DECE5B15F074A900372319 /* BoardGeek */ = {
 			isa = PBXGroup;
 			children = (
+				66BE4B21161E7E13000A3E50 /* includes */,
 				66DECE6415F074A900372319 /* AppDelegate.h */,
 				66DECE6515F074A900372319 /* AppDelegate.m */,
 				66DECE6715F074A900372319 /* MainStoryboard.storyboard */,
@@ -283,6 +298,7 @@
 				66DECE6615F074A900372319 /* AppDelegate.m in Sources */,
 				66DECE6C15F074A900372319 /* ViewController.m in Sources */,
 				6679843216043CD5000415BA /* DetailsViewController.m in Sources */,
+				66BE4B26161E816A000A3E50 /* GTMNSString+HTML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

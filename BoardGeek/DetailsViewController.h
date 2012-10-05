@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailsViewController : UITableViewController
+@interface DetailsViewController : UITableViewController <NSXMLParserDelegate>
 
 @property NSString *gameId;
 
