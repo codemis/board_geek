@@ -18,4 +18,5 @@
 @property NSMutableDictionary *selectedBoardGame;
 @property (strong, nonatomic) IBOutlet UIButton *detailsButton;
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender;
+- (IBAction)done:(UIStoryboardSegue *)segue;
 @end

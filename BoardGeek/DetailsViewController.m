@@ -81,7 +81,11 @@
             cell.textLabel.text = @"";
         }
     }else if ([identifier isEqualToString:@"categories"]) {
-        cell.textLabel.text = @"";
+        if (self.gameCategories) {
+            cell.textLabel.text = [self.gameCategories componentsJoinedByString:@", "];
+        }else{
+            cell.textLabel.text = @"";
+        }
     }else if ([identifier isEqualToString:@"description"]) {
         if (self.gameThumbnail) {
             NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
@@ -104,6 +108,7 @@
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if ([elementName isEqualToString:@"item"]) {
         self.gamePlayers = [[NSMutableDictionary alloc] init];
+        self.gameCategories = [[NSMutableArray alloc] init];
         return;
     }
     if ([elementName isEqualToString:@"name"]) {
@@ -149,6 +154,11 @@
     }
     if ([elementName isEqualToString:@"thumbnail"] || [elementName isEqualToString:@"description"]) {
         self.innerContent = [[NSMutableString alloc] init];
+    }
+    if ([elementName isEqualToString:@"link"]) {
+        if ([attributeDict[@"type"] isEqualToString:@"boardgamecategory"]) {
+            [self.gameCategories addObject:attributeDict[@"value"]];
+        }
     }
 }
 
