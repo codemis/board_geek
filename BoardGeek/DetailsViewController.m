@@ -10,6 +10,11 @@
 #import "GTMNSString+HTML.h"
 
 @interface DetailsViewController ()
+@property(weak,nonatomic)IBOutlet UILabel *nameLabel;
+@property(weak,nonatomic)IBOutlet UILabel *publishedLabel;
+@property(weak,nonatomic)IBOutlet UILabel *playersLabel;
+@property(weak,nonatomic)IBOutlet UILabel *durationLabel;
+@property(weak,nonatomic)IBOutlet UILabel *categoriesLabel;
 @property NSString *gameName;
 @property NSString *gameThumbnail;
 @property NSString *gamePublished;
@@ -24,84 +29,43 @@
 
 @implementation DetailsViewController
 
--(void)grabXMLData
-{
-    NSString *detailsUrl = [NSString stringWithFormat:@"http://www.boardgamegeek.com/xmlapi2/thing?type=boardgame&id=%@", self.gameId];
+-(void)grabXMLData {
+    NSString *detailsUrl = [NSString stringWithFormat:
+                            @"http://www.boardgamegeek.com/xmlapi2/thing?type=boardgame&id=%@",
+                            self.gameId];
     NSURL *url = [[NSURL alloc] initWithString:detailsUrl];
     NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
     [xmlParser setDelegate:self];
-    BOOL success = [xmlParser parse];
-    if (success) {
+    if ([xmlParser parse]) {
+        self.nameLabel.text = self.gameName;
+        self.publishedLabel.text = self.gamePublished;
+        self.playersLabel.text = [NSString stringWithFormat:@"%@-%@",
+                                  self.gamePlayers[@"max"],
+                                  self.gamePlayers[@"min"]];
+        self.durationLabel.text = self.gameDuration;
+        self.categoriesLabel.text =
+          [self.gameCategories componentsJoinedByString:@", "];
+        NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
+        NSData *imgData = [NSData dataWithContentsOfURL:imgUrl];
+        self.headerImage.image = [UIImage imageWithData:imgData];
+        self.descriptionTextView.text = self.gameDesc;
         [self.tableView reloadData];
-    } else{
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
-
-- (void)viewDidLoad
-{
+#pragma mark - View lifecycle
+-(void)viewDidLoad {
     [super viewDidLoad];
+    self.nameLabel.text = @"";
+    self.publishedLabel.text = @"";
+    self.playersLabel.text = @"";
+    self.durationLabel.text = @"";
+    self.categoriesLabel.text = @"";
+    self.descriptionTextView.text = @"";
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
 }
-
-#pragma mark
-#pragma UITableView Delegates
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSString *identifier = cell.reuseIdentifier;
-    // Configure the cell...
-    if ([identifier isEqualToString:@"name"]) {
-        if(self.gameName) {
-            cell.textLabel.text = self.gameName;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"publishedOn"]) {
-        if(self.gamePublished) {
-            cell.textLabel.text = self.gamePublished;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"numPlayers"]) {
-        if(self.gamePlayers) {
-            NSString *max = [self.gamePlayers objectForKey:@"max"];
-            NSString *min = [self.gamePlayers objectForKey:@"min"];
-            cell.textLabel.text = [NSString stringWithFormat:@"%@-%@", min, max];
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"duration"]) {
-        if(self.gameDuration) {
-            cell.textLabel.text = self.gameDuration;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"categories"]) {
-        if (self.gameCategories) {
-            cell.textLabel.text = [self.gameCategories componentsJoinedByString:@", "];
-        }else{
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"description"]) {
-        if (self.gameThumbnail) {
-            NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
-            NSData *imgData = [NSData dataWithContentsOfURL:imgUrl];
-            self.headerImage.image = [UIImage imageWithData:imgData];
-            
-        }
-        if(self.gameDesc) {
-            self.descriptionTextView.text = self.gameDesc;
-        }else {
-            self.descriptionTextView.text = @"";
-        }
-    }
-    return cell;
-}
-
 #pragma mark
 #pragma NSXMLParser Delegates
 
