@@ -70,6 +70,7 @@
     if(self.gameDesc) {
         self.descriptionTextView.text = self.gameDesc;
     }
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
