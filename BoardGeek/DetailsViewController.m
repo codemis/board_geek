@@ -163,7 +163,8 @@
         // code from http://www.raywenderlich.com/forums/viewtopic.php?f=2&t=2870
         UINavigationController *navController = [segue destinationViewController];
         ShoppingViewController *tableViewController = (ShoppingViewController *)navController.topViewController;
-        tableViewController.gameName = [self.gameDetails objectForKey:@"name"];
+        //tableViewController.gameName = [self.gameDetails objectForKey:@"name"];
+        tableViewController.gameName = @"digital+camera";
     }
 }
 

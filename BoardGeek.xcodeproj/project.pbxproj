@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6679843216043CD5000415BA /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6679843116043CD5000415BA /* DetailsViewController.m */; };
 		668599A71621395B007FE9D6 /* ShoppingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 668599A61621395B007FE9D6 /* ShoppingViewController.m */; };
+		668599AA1621451A007FE9D6 /* appSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 668599A91621451A007FE9D6 /* appSettings.plist */; };
+		668599AC16214656007FE9D6 /* appSettingsSample.plist in Resources */ = {isa = PBXBuildFile; fileRef = 668599AB16214656007FE9D6 /* appSettingsSample.plist */; };
 		66B6369916208D2400047E38 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 66B6369816208D2400047E38 /* README.md */; };
 		66BE4B26161E816A000A3E50 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 66BE4B25161E816A000A3E50 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		66DECE5615F074A900372319 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66DECE5515F074A900372319 /* UIKit.framework */; };
@@ -43,6 +45,8 @@
 		6679843116043CD5000415BA /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		668599A51621395B007FE9D6 /* ShoppingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingViewController.h; sourceTree = "<group>"; };
 		668599A61621395B007FE9D6 /* ShoppingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoppingViewController.m; sourceTree = "<group>"; };
+		668599A91621451A007FE9D6 /* appSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appSettings.plist; sourceTree = "<group>"; };
+		668599AB16214656007FE9D6 /* appSettingsSample.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = appSettingsSample.plist; sourceTree = "<group>"; };
 		66B6369816208D2400047E38 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		66BE4B23161E816A000A3E50 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		66BE4B24161E816A000A3E50 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
@@ -149,6 +153,8 @@
 				6679843116043CD5000415BA /* DetailsViewController.m */,
 				668599A51621395B007FE9D6 /* ShoppingViewController.h */,
 				668599A61621395B007FE9D6 /* ShoppingViewController.m */,
+				668599A91621451A007FE9D6 /* appSettings.plist */,
+				668599AB16214656007FE9D6 /* appSettingsSample.plist */,
 			);
 			path = BoardGeek;
 			sourceTree = "<group>";
@@ -269,6 +275,8 @@
 				66DECE9115F0759100372319 /* cancel.png in Resources */,
 				66DECE9215F0759100372319 /* geek_zombie_512.png in Resources */,
 				66B6369916208D2400047E38 /* README.md in Resources */,
+				668599AA1621451A007FE9D6 /* appSettings.plist in Resources */,
+				668599AC16214656007FE9D6 /* appSettingsSample.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
