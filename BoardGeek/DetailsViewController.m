@@ -10,16 +10,11 @@
 #import "GTMNSString+HTML.h"
 
 @interface DetailsViewController ()
-@property NSString *gameName;
-@property NSString *gameThumbnail;
-@property NSString *gamePublished;
-@property NSMutableDictionary *gamePlayers;
-@property NSString *gameDuration;
+@property NSMutableDictionary *gameDetails;
 @property NSMutableArray *gameCategories;
-@property NSString *gameDesc;
+@property NSMutableString *innerContent;
 @property (strong, nonatomic) IBOutlet UIImageView *headerImage;
 @property (strong, nonatomic) IBOutlet UITextView *descriptionTextView;
-@property NSMutableString *innerContent;
 @property (weak, nonatomic) IBOutlet UILabel *nameCellLabel;
 @property (weak, nonatomic) IBOutlet UILabel *publishedOnCellLabel;
 @property (weak, nonatomic) IBOutlet UILabel *numPlayersCellLabel;
@@ -29,8 +24,7 @@
 
 @implementation DetailsViewController
 
--(void)grabXMLData
-{
+-(void)grabXMLData {
     NSString *detailsUrl = [NSString stringWithFormat:@"http://www.boardgamegeek.com/xmlapi2/thing?type=boardgame&id=%@", self.gameId];
     NSURL *url = [[NSURL alloc] initWithString:detailsUrl];
     NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
@@ -44,38 +38,39 @@
 }
 
 -(void)setTableCellData {
-    if(self.gameName) {
-        self.nameCellLabel.text = self.gameName;
+    if([self.gameDetails objectForKey:@"name"]) {
+        self.nameCellLabel.text = [self.gameDetails objectForKey:@"name"];
     }
-    if(self.gamePublished) {
-        self.publishedOnCellLabel.text = self.gamePublished;
+    if([self.gameDetails objectForKey:@"published"]) {
+        self.publishedOnCellLabel.text = [self.gameDetails objectForKey:@"published"];
     }
-    if(self.gamePlayers) {
-        NSString *max = [self.gamePlayers objectForKey:@"max"];
-        NSString *min = [self.gamePlayers objectForKey:@"min"];
+    if([self.gameDetails objectForKey:@"maxPlayers"] && [self.gameDetails objectForKey:@"minPlayers"]) {
+        NSString *max = [self.gameDetails objectForKey:@"maxPlayers"];
+        NSString *min = [self.gameDetails objectForKey:@"minPlayers"];
         self.numPlayersCellLabel.text = [NSString stringWithFormat:@"%@-%@", min, max];
     }
-    if(self.gameDuration) {
-        self.durationCellLabel.text = self.gameDuration;
+    if([self.gameDetails objectForKey:@"duration"]) {
+        self.durationCellLabel.text = [self.gameDetails objectForKey:@"duration"];
     }
     if (self.gameCategories) {
         self.categoriesCellLabel.text = [self.gameCategories componentsJoinedByString:@", "];
     }
-    if (self.gameThumbnail) {
-        NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
+    if ([self.gameDetails objectForKey:@"thumbnail"]) {
+        NSURL *imgUrl = [NSURL URLWithString:[self.gameDetails objectForKey:@"thumbnail"]];
         NSData *imgData = [NSData dataWithContentsOfURL:imgUrl];
         self.headerImage.image = [UIImage imageWithData:imgData];
         
     }
-    if(self.gameDesc) {
-        self.descriptionTextView.text = self.gameDesc;
+    if([self.gameDetails objectForKey:@"description"]) {
+        self.descriptionTextView.text = [self.gameDetails objectForKey:@"description"];
     }
     [self.tableView reloadData];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    self.gameDetails = [[NSMutableDictionary alloc] init];
+    self.gameCategories = [[NSMutableArray alloc] init];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
@@ -85,25 +80,20 @@
 #pragma NSXMLParser Delegates
 
 -(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-    if ([elementName isEqualToString:@"item"]) {
-        self.gamePlayers = [[NSMutableDictionary alloc] init];
-        self.gameCategories = [[NSMutableArray alloc] init];
-        return;
-    }
     if ([elementName isEqualToString:@"name"]) {
-        if (!self.gameName) {
+        if ([self.gameDetails objectForKey:@"name"] == nil) {
             NSString *name = [attributeDict objectForKey:@"value"];
             if (name){
-                self.gameName = name;
+                [self.gameDetails setObject:name forKey:@"name"];
             }
         }
         return;
     }
     if ([elementName isEqualToString:@"yearpublished"]) {
-        if (!self.gamePublished) {
+        if ([self.gameDetails objectForKey:@"published"] == nil) {
             NSString *published = [attributeDict objectForKey:@"value"];
             if (published){
-                self.gamePublished = published;
+                [self.gameDetails setObject:published forKey:@"published"];
             }
         }
         return;
@@ -111,22 +101,22 @@
     if ([elementName isEqualToString:@"minplayers"]) {
         NSString *minPlayers = [attributeDict objectForKey:@"value"];
         if (minPlayers){
-            [self.gamePlayers setObject:minPlayers forKey:@"min"];
+            [self.gameDetails setObject:minPlayers forKey:@"minPlayers"];
         }
         return;
     }
     if ( [elementName isEqualToString:@"maxplayers"]) {
         NSString *maxPlayers = [attributeDict objectForKey:@"value"];
         if (maxPlayers){
-            [self.gamePlayers setObject:maxPlayers forKey:@"max"];
+            [self.gameDetails setObject:maxPlayers forKey:@"maxPlayers"];
         }
         return;
     }
     if ([elementName isEqualToString:@"playingtime"]) {
-        if (!self.gameDuration) {
+        if ([self.gameDetails objectForKey:@"duration"] == nil) {
             NSString *duration = [attributeDict objectForKey:@"value"];
             if (duration){
-                self.gameDuration = duration;
+                [self.gameDetails setObject:duration forKey:@"duration"];
             }
         }
         return;
@@ -141,25 +131,24 @@
     }
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
     NSMutableString *content = [NSMutableString stringWithString:string];
     [self.innerContent appendString:content];
 }
 
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
+-(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"description"]) {
         //Strip white spaces
         //http://stackoverflow.com/questions/3200521/cocoa-trim-all-leading-whitespace-from-nsstring
         NSRange range = [self.innerContent rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
         NSString *description = [self.innerContent stringByReplacingCharactersInRange:range withString:@""];
-        self.gameDesc = [description gtm_stringByUnescapingFromHTML];
+        [self.gameDetails setObject:[description gtm_stringByUnescapingFromHTML] forKey:@"description"];
         self.innerContent = nil;
     }
     if ([elementName isEqualToString:@"thumbnail"]) {
         NSRange range = [self.innerContent rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
-        self.gameThumbnail = [self.innerContent stringByReplacingCharactersInRange:range withString:@""];
+        NSString *gameThumbnail = [self.innerContent stringByReplacingCharactersInRange:range withString:@""];
+        [self.gameDetails setObject:gameThumbnail forKey:@"thumbnail"];
         self.innerContent = nil;
     }
     return;
