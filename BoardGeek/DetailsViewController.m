@@ -8,6 +8,7 @@
 
 #import "DetailsViewController.h"
 #import "GTMNSString+HTML.h"
+#import "ShoppingViewController.h"
 
 @interface DetailsViewController ()
 @property NSMutableDictionary *gameDetails;
@@ -152,6 +153,18 @@
         self.innerContent = nil;
     }
     return;
+}
+
+#pragma mark
+#pragma Segue
+
+-(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"shoppingSegue"]) {
+        // code from http://www.raywenderlich.com/forums/viewtopic.php?f=2&t=2870
+        UINavigationController *navController = [segue destinationViewController];
+        ShoppingViewController *tableViewController = (ShoppingViewController *)navController.topViewController;
+        tableViewController.gameName = [self.gameDetails objectForKey:@"name"];
+    }
 }
 
 @end
