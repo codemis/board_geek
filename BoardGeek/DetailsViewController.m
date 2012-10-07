@@ -20,6 +20,11 @@
 @property (strong, nonatomic) IBOutlet UIImageView *headerImage;
 @property (strong, nonatomic) IBOutlet UITextView *descriptionTextView;
 @property NSMutableString *innerContent;
+@property (weak, nonatomic) IBOutlet UILabel *nameCellLabel;
+@property (weak, nonatomic) IBOutlet UILabel *publishedOnCellLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numPlayersCellLabel;
+@property (weak, nonatomic) IBOutlet UILabel *durationCellLabel;
+@property (weak, nonatomic) IBOutlet UILabel *categoriesCellLabel;
 @end
 
 @implementation DetailsViewController
@@ -32,10 +37,39 @@
     [xmlParser setDelegate:self];
     BOOL success = [xmlParser parse];
     if (success) {
-        [self.tableView reloadData];
+        [self setTableCellData];
     } else{
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+-(void)setTableCellData {
+    if(self.gameName) {
+        self.nameCellLabel.text = self.gameName;
+    }
+    if(self.gamePublished) {
+        self.publishedOnCellLabel.text = self.gamePublished;
+    }
+    if(self.gamePlayers) {
+        NSString *max = [self.gamePlayers objectForKey:@"max"];
+        NSString *min = [self.gamePlayers objectForKey:@"min"];
+        self.numPlayersCellLabel.text = [NSString stringWithFormat:@"%@-%@", min, max];
+    }
+    if(self.gameDuration) {
+        self.durationCellLabel.text = self.gameDuration;
+    }
+    if (self.gameCategories) {
+        self.categoriesCellLabel.text = [self.gameCategories componentsJoinedByString:@", "];
+    }
+    if (self.gameThumbnail) {
+        NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
+        NSData *imgData = [NSData dataWithContentsOfURL:imgUrl];
+        self.headerImage.image = [UIImage imageWithData:imgData];
+        
+    }
+    if(self.gameDesc) {
+        self.descriptionTextView.text = self.gameDesc;
+    }
 }
 
 - (void)viewDidLoad
@@ -44,62 +78,6 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
-}
-
-#pragma mark
-#pragma UITableView Delegates
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSString *identifier = cell.reuseIdentifier;
-    // Configure the cell...
-    if ([identifier isEqualToString:@"name"]) {
-        if(self.gameName) {
-            cell.textLabel.text = self.gameName;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"publishedOn"]) {
-        if(self.gamePublished) {
-            cell.textLabel.text = self.gamePublished;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"numPlayers"]) {
-        if(self.gamePlayers) {
-            NSString *max = [self.gamePlayers objectForKey:@"max"];
-            NSString *min = [self.gamePlayers objectForKey:@"min"];
-            cell.textLabel.text = [NSString stringWithFormat:@"%@-%@", min, max];
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"duration"]) {
-        if(self.gameDuration) {
-            cell.textLabel.text = self.gameDuration;
-        }else {
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"categories"]) {
-        if (self.gameCategories) {
-            cell.textLabel.text = [self.gameCategories componentsJoinedByString:@", "];
-        }else{
-            cell.textLabel.text = @"";
-        }
-    }else if ([identifier isEqualToString:@"description"]) {
-        if (self.gameThumbnail) {
-            NSURL *imgUrl = [NSURL URLWithString:self.gameThumbnail];
-            NSData *imgData = [NSData dataWithContentsOfURL:imgUrl];
-            self.headerImage.image = [UIImage imageWithData:imgData];
-            
-        }
-        if(self.gameDesc) {
-            self.descriptionTextView.text = self.gameDesc;
-        }else {
-            self.descriptionTextView.text = @"";
-        }
-    }
-    return cell;
 }
 
 #pragma mark
