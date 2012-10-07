@@ -5,10 +5,8 @@
 //  Created by Johnathan Pulos on 8/30/12.
 //  Copyright (c) 2012 Johnathan Pulos. All rights reserved.
 //
+@interface ViewController : UIViewController
 
-#import <UIKit/UIKit.h>
-
-@interface ViewController : UIViewController <NSXMLParserDelegate, UIGestureRecognizerDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *chatBox;
 @property NSMutableArray *boardGameItemsArray;
 @property NSMutableDictionary *boardGameItemData;
@@ -19,4 +17,5 @@
 @property (strong, nonatomic) IBOutlet UIButton *detailsButton;
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender;
 - (IBAction)done:(UIStoryboardSegue *)segue;
+
 @end

@@ -5,60 +5,52 @@
 //  Created by Johnathan Pulos on 8/30/12.
 //  Copyright (c) 2012 Johnathan Pulos. All rights reserved.
 //
-
 #import "ViewController.h"
 #import "DetailsViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <NSXMLParserDelegate,UIGestureRecognizerDelegate>
 
 @end
 
 @implementation ViewController
 
--(void)updateChatBox:(NSString *)newText
-{
+-(void)recommendGame:(NSString *)game {
+    [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?",
+                         game]];
+}
+-(void)updateChatBox:(NSString *)newText {
     self.chatBox.text = newText;
 }
-
--(void)grabXMLData
-{
-    NSURL *url = [[NSURL alloc] initWithString:@"http://www.boardgamegeek.com/xmlapi2/hot?type=boardgame"];
-    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
+-(void)grabXMLData {
+    NSString *boardGameGeekAPIHotSearch =
+      @"http://www.boardgamegeek.com/xmlapi2/hot?type=boardgame";
+    NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithContentsOfURL:
+                              [NSURL URLWithString:boardGameGeekAPIHotSearch]];
     [xmlParser setDelegate:self];
-    BOOL success = [xmlParser parse];
-    if (success) {
-        if ([self.boardGameItemsArray count] == 0) {
-            [self updateChatBox:@"Brain fart...Try again..."];
-            return;
-        }
+    if ([xmlParser parse] && [self.boardGameItemsArray count] > 0) {
         int rndIndex = arc4random()%[self.boardGameItemsArray count];
-        self.selectedBoardGame = [self.boardGameItemsArray objectAtIndex:rndIndex];
-        NSString *title = [self.selectedBoardGame objectForKey:@"itemName"];
-        [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
+        self.selectedBoardGame = self.boardGameItemsArray[rndIndex];
+        [self recommendGame:self.selectedBoardGame[@"itemName"]];
         self.detailsButton.hidden = NO;
-    } else{
-        [self updateChatBox:@"Brain fart...Try again..."];
-    }
+    } else [self updateChatBox:@"Brain fart...Try again..."];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
-
-- (void)viewDidLoad
-{
+-(void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    BOOL isEmpty = ([self.selectedBoardGame count] == 0);
-    if (!isEmpty) {
-        NSString *title = [self.selectedBoardGame objectForKey:@"itemName"];
-        [self updateChatBox:[NSString stringWithFormat:@"Have you played \"%@\"?", title]];
-    }
-    [self setBoardGameItemsArray:[[NSMutableArray alloc] init]];
+    if ([self.selectedBoardGame count] > 0)
+        [self recommendGame:self.selectedBoardGame[@"itemName"]];
+    self.boardGameItemsArray = [[NSMutableArray alloc] init];
     self.detailsButton.hidden = YES;
 }
 
 #pragma mark
 #pragma NSXMLParser Delegates
 
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+-(void)  parser:(NSXMLParser *)parser
+didStartElement:(NSString *)elementName
+   namespaceURI:(NSString *)namespaceURI
+  qualifiedName:(NSString *)qName
+     attributes:(NSDictionary *)attributeDict {
     if ( [elementName isEqualToString:@"item"]) {
         [self setBoardGameItemData:[[NSMutableDictionary alloc] init]];
         if (!self.boardGameItemId) {
@@ -91,13 +83,14 @@
     
 }
 
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
     
 }
 
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
+-(void)parser:(NSXMLParser *)parser
+didEndElement:(NSString *)elementName
+ namespaceURI:(NSString *)namespaceURI
+qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"thumbnail"]) {
         [self.boardGameItemData setObject:self.boardGameThumbnail forKey:@"thumbnail"];
         self.boardGameThumbnail = nil;
