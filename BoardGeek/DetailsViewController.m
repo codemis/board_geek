@@ -66,10 +66,12 @@
     // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
 }
-#pragma mark
-#pragma NSXMLParser Delegates
-
--(void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+#pragma mark - NSXMLParser Delegates
+-(void)  parser:(NSXMLParser *)parser
+didStartElement:(NSString *)elementName
+   namespaceURI:(NSString *)namespaceURI
+  qualifiedName:(NSString *)qName
+     attributes:(NSDictionary *)attributeDict {
     if ([elementName isEqualToString:@"item"]) {
         self.gamePlayers = [[NSMutableDictionary alloc] init];
         self.gameCategories = [[NSMutableArray alloc] init];
@@ -77,46 +79,37 @@
     }
     if ([elementName isEqualToString:@"name"]) {
         if (!self.gameName) {
-            NSString *name = [attributeDict objectForKey:@"value"];
-            if (name){
-                self.gameName = name;
-            }
+            NSString *name = attributeDict[@"value"];
+            if (name) self.gameName = name;
         }
         return;
     }
     if ([elementName isEqualToString:@"yearpublished"]) {
         if (!self.gamePublished) {
-            NSString *published = [attributeDict objectForKey:@"value"];
-            if (published){
-                self.gamePublished = published;
-            }
+            NSString *published = attributeDict[@"value"];
+            if (published) self.gamePublished = published;
         }
         return;
     }
     if ([elementName isEqualToString:@"minplayers"]) {
-        NSString *minPlayers = [attributeDict objectForKey:@"value"];
-        if (minPlayers){
-            [self.gamePlayers setObject:minPlayers forKey:@"min"];
-        }
+        NSString *minPlayers = attributeDict[@"value"];
+        if (minPlayers) self.gamePlayers[@"min"] = minPlayers;
         return;
     }
     if ( [elementName isEqualToString:@"maxplayers"]) {
-        NSString *maxPlayers = [attributeDict objectForKey:@"value"];
-        if (maxPlayers){
-            [self.gamePlayers setObject:maxPlayers forKey:@"max"];
-        }
+        NSString *maxPlayers = attributeDict[@"value"];
+        if (maxPlayers) self.gamePlayers[@"max"] = maxPlayers;
         return;
     }
     if ([elementName isEqualToString:@"playingtime"]) {
         if (!self.gameDuration) {
-            NSString *duration = [attributeDict objectForKey:@"value"];
-            if (duration){
-                self.gameDuration = duration;
-            }
+            NSString *duration = attributeDict[@"value"];
+            if (duration) self.gameDuration = duration;
         }
         return;
     }
-    if ([elementName isEqualToString:@"thumbnail"] || [elementName isEqualToString:@"description"]) {
+    if ([elementName isEqualToString:@"thumbnail"] ||
+        [elementName isEqualToString:@"description"]) {
         self.innerContent = [[NSMutableString alloc] init];
     }
     if ([elementName isEqualToString:@"link"]) {
@@ -125,29 +118,34 @@
         }
     }
 }
-
--(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-    NSMutableString *content = [NSMutableString stringWithString:string];
-    [self.innerContent appendString:content];
+-(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    [self.innerContent appendString:[NSMutableString stringWithString:string]];
 }
-
--(void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
-{
+-(void)parser:(NSXMLParser *)parser
+didEndElement:(NSString *)elementName
+ namespaceURI:(NSString *)namespaceURI
+qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"description"]) {
         //Strip white spaces
         //http://stackoverflow.com/questions/3200521/cocoa-trim-all-leading-whitespace-from-nsstring
-        NSRange range = [self.innerContent rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
-        NSString *description = [self.innerContent stringByReplacingCharactersInRange:range withString:@""];
+        NSRange range =
+          [self.innerContent rangeOfString:@"^\\s*"
+                                   options:NSRegularExpressionSearch];
+        NSString *description =
+          [self.innerContent stringByReplacingCharactersInRange:range
+                                                     withString:@""];
         self.gameDesc = [description gtm_stringByUnescapingFromHTML];
         self.innerContent = nil;
     }
     if ([elementName isEqualToString:@"thumbnail"]) {
-        NSRange range = [self.innerContent rangeOfString:@"^\\s*" options:NSRegularExpressionSearch];
-        self.gameThumbnail = [self.innerContent stringByReplacingCharactersInRange:range withString:@""];
+        NSRange range =
+          [self.innerContent rangeOfString:@"^\\s*"
+                                   options:NSRegularExpressionSearch];
+        self.gameThumbnail =
+          [self.innerContent stringByReplacingCharactersInRange:range
+                                                     withString:@""];
         self.innerContent = nil;
     }
     return;
 }
-
 @end

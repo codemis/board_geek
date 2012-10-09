@@ -42,104 +42,80 @@
     self.boardGameItemsArray = [[NSMutableArray alloc] init];
     self.detailsButton.hidden = YES;
 }
-
-#pragma mark
-#pragma NSXMLParser Delegates
-
+#pragma mark - NSXMLParser Delegates
 -(void)  parser:(NSXMLParser *)parser
 didStartElement:(NSString *)elementName
    namespaceURI:(NSString *)namespaceURI
   qualifiedName:(NSString *)qName
      attributes:(NSDictionary *)attributeDict {
-    if ( [elementName isEqualToString:@"item"]) {
-        [self setBoardGameItemData:[[NSMutableDictionary alloc] init]];
+    if ([elementName isEqualToString:@"item"]) {
+        self.boardGameItemData = [[NSMutableDictionary alloc] init];
         if (!self.boardGameItemId) {
-            NSString *itemId = [attributeDict objectForKey:@"id"];
-            if (itemId){
-             self.boardGameItemId = itemId;
-            }
+            NSString *itemId = attributeDict[@"id"];
+            if (itemId) self.boardGameItemId = itemId;
         }
         return;
     }
-    if ( [elementName isEqualToString:@"thumbnail"]) {
+    if ([elementName isEqualToString:@"thumbnail"]) {
         if (!self.boardGameThumbnail) {
-            NSString *thumbnail = [attributeDict objectForKey:@"value"];
-            if (thumbnail){
-                self.boardGameThumbnail = thumbnail;
-            }
+            NSString *thumbnail = attributeDict[@"value"];
+            if (thumbnail) self.boardGameThumbnail = thumbnail;
         }
         return;
     }
-    if ( [elementName isEqualToString:@"name"]) {
+    if ([elementName isEqualToString:@"name"]) {
         if (!self.boardGameName) {
-            NSString *name = [attributeDict objectForKey:@"value"];
-            if (name){
-                self.boardGameName = name;
-            }
+            NSString *name = attributeDict[@"value"];
+            if (name) self.boardGameName = name;
         }
         return;
-    }
-
-    
+    }    
 }
-
 -(void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    
 }
-
 -(void)parser:(NSXMLParser *)parser
 didEndElement:(NSString *)elementName
  namespaceURI:(NSString *)namespaceURI
 qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString:@"thumbnail"]) {
-        [self.boardGameItemData setObject:self.boardGameThumbnail forKey:@"thumbnail"];
+        self.boardGameItemData[@"thumbnail"] = self.boardGameThumbnail;
         self.boardGameThumbnail = nil;
         return;
     }
     if ([elementName isEqualToString:@"name"]) {
-        [self.boardGameItemData setObject:self.boardGameName forKey:@"itemName"];
+        self.boardGameItemData[@"itemName"] = self.boardGameName;
         self.boardGameName = nil;
         return;
     }
     if ([elementName isEqualToString:@"item"]) {
-        [self.boardGameItemData setObject:self.boardGameItemId forKey:@"itemID"];
+        self.boardGameItemData[@"itemID"] = self.boardGameItemId;
         self.boardGameItemId = nil;
-        // We have gone through a sing item, so add it to an array
+        // We have gone through a single item, so add it to an array
         [self.boardGameItemsArray addObject:self.boardGameItemData];
         return;
     }
-
 }
-
-#pragma mark
-#pragma UIGesture Delegates
-
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    if ([touch.view isKindOfClass:[UIButton class]]) {
-        return NO;
-    }
-    return YES;
+#pragma mark - UIGesture Delegates
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+      shouldReceiveTouch:(UITouch *)touch {
+    return [touch.view isKindOfClass:[UIButton class]] ? NO : YES;
 }
-
-#pragma mark
-#pragma IBActions
+#pragma mark - IBActions
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender {
     [self updateChatBox:@"Thinking...Hmmmmm....."];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.detailsButton.hidden = YES;
-    // Delay XML Parse so the indicators get set.  Parsing is synchronise, and will block indicators
+    // Delay XML parse so indicator starts. Parsing is synchronous and will
+    // block indicators
     [self performSelector:@selector(grabXMLData) withObject:nil afterDelay:0.5];
 }
-#pragma mark
-#pragma Segue Delegates
+#pragma mark - Segue Delegates
 - (IBAction)done:(UIStoryboardSegue *)segue {
 }
-
 -(void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"getDetails"]) {
-        DetailsViewController *controller = [segue destinationViewController];
-        controller.gameId = [self.selectedBoardGame objectForKey:@"itemID"];
+    if ([segue.identifier isEqualToString:@"getDetails"]) {
+        DetailsViewController *controller = segue.destinationViewController;
+        controller.gameId = self.selectedBoardGame[@"itemID"];
     }
 }
 @end
